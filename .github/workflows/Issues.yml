@@ -1,0 +1,8 @@
+name: issues
+on: issues
+jobs:
+  issue:
+    runs-on: windows-latest
+    steps:
+      - name: issue happened
+        run: echo ${{ toJson(github) }}

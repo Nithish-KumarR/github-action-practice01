@@ -1,0 +1,38 @@
+name: LintTest
+on: push
+jobs:
+  lint:
+    runs-on: windows-latest
+    steps:
+      - name: download repo
+        uses: actions/checkout@v3
+      - name: install dependencies
+        run: npm ci
+      - name: running lint
+        run: npm run lint
+  test:
+    runs-on: windows-latest
+    needs: [lint]
+    steps:
+      - name: download repo
+        uses: actions/checkout@v3
+      - name: install dependencies
+        run: npm ci
+      - name: running test
+        run: npm run test
+      - name: build project
+        run: npm run build
+      - name: final build
+        run: echo "all required pipeline completed"
+  build:
+    needs: [test]
+    runs-on: windows-latest
+    steps:
+      - name: download repo
+        uses: actions/checkout@v3
+      - name: install dependencies
+        run: npm ci
+      - name: build project
+        run: npm run build
+      - name: final build
+        run: echo "all required pipeline completed"
