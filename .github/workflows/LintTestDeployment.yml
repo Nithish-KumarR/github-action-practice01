@@ -1,5 +1,14 @@
-name: LintTest
-on: push
+name: LintTestDeployment
+on:
+  pull_request:
+    types:
+      - opened
+  push:
+    branches:
+      - develop
+      - "dev-*" #this will allow these kind of branches --> dev-one dev-two etc
+      - "dev-**" #this will allow these kind of branches --> dev-one-1 dev-one-2 dev-two-1 (multiple hypens)
+
 jobs:
   lint:
     runs-on: windows-latest
@@ -34,5 +43,16 @@ jobs:
         run: npm ci
       - name: build project
         run: npm run build
-      - name: final build
-        run: echo "all required pipeline completed"
+      - name: store artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: |
+            dist
+            dist2
+  deploy:
+    runs-on: windows-latest
+    needs: [build]
+    steps:
+      - name: deploy project
+        run: echo "Deployed"
