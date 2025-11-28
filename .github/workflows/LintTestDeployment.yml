@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: download repo
         uses: actions/checkout@v3
-      # - name: node setup
+      # - name: node setup #removed
       #   uses: actions/setup-node@v4
       #   with:
       #     node-version: 18
