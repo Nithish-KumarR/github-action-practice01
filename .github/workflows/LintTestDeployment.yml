@@ -58,7 +58,7 @@ jobs:
         shell: cmd
         run: |
           for %%f in (dist\assets\*.js) do (
-            echo filename=%%`nxf>> %GITHUB_OUTPUT
+            echo filename=%%~nxf>> %GITHUB_OUTPUT
           )
 
   deploy:
