@@ -47,12 +47,19 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist-files
-          path: |
-            dist
+          path:
+            | #Here dist is the folder which we need it can be file, folder, since dist2 is not available the job will not add in the dist-files, we can add package.json whatever we required
+            dist 
             dist2
   deploy:
     runs-on: windows-latest
     needs: [build]
     steps:
+      - name: get artifcats from above job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      - name: output
+        run: ls
       - name: deploy project
         run: echo "Deployed"
