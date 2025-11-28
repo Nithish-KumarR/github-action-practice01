@@ -36,6 +36,8 @@ jobs:
   build:
     needs: [test]
     runs-on: windows-latest
+    outputs:
+      script-file: ${{ steps.fileName.outputs.filename }}
     steps:
       - name: download repo
         uses: actions/checkout@v3
@@ -51,6 +53,14 @@ jobs:
             | #Here dist is the folder which we need it can be file, folder, since dist2 is not available the job will not add in the dist-files, we can add package.json whatever we required
             dist 
             dist2
+      - name: file name
+        id: fileName
+        shell: cmd
+        run: |
+          for %%f in (dist\assets\*.js) do (
+            echo filename=%%`nxf>> %GITHUB_OUTPUT
+          )
+
   deploy:
     runs-on: windows-latest
     needs: [build]
@@ -62,4 +72,4 @@ jobs:
       - name: output
         run: ls
       - name: deploy project
-        run: echo "Deployed"
+        run: echo "Deployed ${{ needs.build.outputs.script-file }}"
