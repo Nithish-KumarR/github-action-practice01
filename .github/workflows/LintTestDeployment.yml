@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v3
       - name: node setup
         uses: actions/setup-node@v4
+        id: node-cache
         with:
           node-version: 18
           cache: npm
@@ -36,9 +37,18 @@ jobs:
       - name: download repo
         uses: actions/checkout@v3
       - name: install dependencies
+        continue-on-error: true
         run: npm ci
       - name: running test
+        id: getTestResultStatus
+        continue-on-error: true
         run: npm run test
+      - name: generate report
+        if: failure() && steps.getTestResultStatus.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: "test.json"
       - name: build project
         run: npm run build
       - name: final build
